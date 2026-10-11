@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+
+const guides = (await getCollection('docs')).sort((a, b) =>
+	a.data.title.localeCompare(b.data.title, 'ru')
+);
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<StarlightPage
+	frontmatter={{
+		title: 'Гайды по Испании',
+		description: 'Практические гайды на русском языке о жизни, переезде и путешествиях по Испании.',
+		tableOfContents: false,
+		editUrl: false,
+	}}
+>
+	<p>Практические гайды на русском языке о жизни, переезде и путешествиях по Испании.</p>
+
+	<h2>Гайды</h2>
+	{
+		guides.length > 0 ? (
+			<ul>
+				{guides.map((guide) => (
+					<li>
+						<a href={`${base}/${guide.id}/`}>{guide.data.title}</a>
+						{guide.data.description && <> — {guide.data.description}</>}
+					</li>
+				))}
+			</ul>
+		) : (
+			<p>Пока пусто.</p>
+		)
+	}
+</StarlightPage>

@@ -7,6 +7,7 @@ Practical guides about Spain, written in Russian. Structure and workflow are in 
 - Write every guide in Russian. Keep Spanish official terms in Spanish on first use, with a Russian explanation: «NIE (Número de Identidad de Extranjero) — номер иностранца».
 - Start a new guide from `templates/guide.md` and save it as `guides/<slug>.md` with a Latin, hyphenated slug.
 - Add every new guide to the «Гайды» list in `README.md`.
+- Each guide is a page on the Astro/Starlight site. Fill `title` and `description` in the front matter and do not add a `# ...` heading in the body; the site renders `title` as the page heading.
 
 ## Facts
 

@@ -1,0 +1,34 @@
+---
+import Default from '@astrojs/starlight/components/PageTitle.astro';
+
+const { entry, lang } = Astro.locals.starlightRoute;
+const { updated, regions } = entry.data;
+---
+
+<Default />
+{
+	(updated || regions) && (
+		<p class="guide-meta">
+			{updated && (
+				<span>
+					Обновлено:{' '}
+					<time datetime={updated.toISOString().slice(0, 10)}>
+						{updated.toLocaleDateString(lang, { dateStyle: 'long', timeZone: 'UTC' })}
+					</time>
+				</span>
+			)}
+			{regions && <span>Регионы: {regions}</span>}
+		</p>
+	)
+}
+
+<style>
+	.guide-meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem 1.5rem;
+		margin-top: 0.5rem;
+		font-size: var(--sl-text-sm);
+		color: var(--sl-color-gray-3);
+	}
+</style>
