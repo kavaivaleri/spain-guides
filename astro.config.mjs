@@ -21,6 +21,11 @@ export default defineConfig({
 			editLink: {
 				baseUrl: 'https://github.com/kavaivaleri/spain-guides/edit/main/',
 			},
+			// Гайды лежат вне src/content/docs, поэтому включаем для них
+			// разметку Starlight (плашки :::note, якоря заголовков).
+			markdown: {
+				processedDirs: ['./guides/'],
+			},
 			components: {
 				PageTitle: './src/components/PageTitle.astro',
 			},

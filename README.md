@@ -34,4 +34,4 @@ npm run build    # сборка в dist/
 
 ## Гайды
 
-- [Гостевая виза для родственника по приглашению](guides/viza-po-priglasheniyu.md) — Carta de invitación, документы и подача визы через BLS
+- [Гостевая виза для родственника по приглашению (Астурия)](guides/viza-po-priglasheniyu.md) — сроки, Carta de invitación, отправка в Россию, билеты и подача визы через BLS
