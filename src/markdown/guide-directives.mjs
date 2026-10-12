@@ -125,6 +125,16 @@ const leaves = {
 			]),
 		]);
 	},
+
+	/** Сравнение тарифов: ::tariffs{kind="luz"} или ::tariffs{kind="gas"}. Рисует скрипт. */
+	tariffs(node) {
+		const kind = node.attributes?.kind === 'gas' ? 'gas' : 'luz';
+		return el('div', { class: 'gd-planner gd-calc', 'data-tariff-calc': kind }, [
+			el('p', { class: 'gd-planner__fallback' }, [
+				text('Калькулятор работает при включённом JavaScript. Без него посчитайте по формуле ниже.'),
+			]),
+		]);
+	},
 };
 
 export function guideDirectives() {

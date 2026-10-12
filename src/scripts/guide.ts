@@ -1,5 +1,5 @@
 // Интерактив гайдов: отметки в чек-листах, кнопка «Скопировать»,
-// калькулятор дат. Без JavaScript страницы читаются как обычный текст.
+// калькулятор дат, сравнение тарифов. Без JavaScript страницы читаются как обычный текст.
 
 const store = {
 	get(key: string): Record<string, boolean> {
@@ -118,6 +118,10 @@ function init() {
 	const planners = document.querySelectorAll<HTMLElement>('[data-planner]');
 	if (planners.length) {
 		import('./visa-planner.ts').then(({ mountPlanner }) => planners.forEach(mountPlanner));
+	}
+	const calcs = document.querySelectorAll<HTMLElement>('[data-tariff-calc]');
+	if (calcs.length) {
+		import('./tariff-calc.ts').then(({ mountTariffCalc }) => calcs.forEach(mountTariffCalc));
 	}
 }
 
