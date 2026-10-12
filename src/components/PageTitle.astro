@@ -1,10 +1,39 @@
 ---
+import { getCollection } from 'astro:content';
 import Default from '@astrojs/starlight/components/PageTitle.astro';
 
 const { entry, lang } = Astro.locals.starlightRoute;
-const { updated, regions } = entry.data;
+const { updated, regions, step, who } = entry.data;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const actors = {
+	host: 'Делает приглашающий',
+	guest: 'Делает гость',
+	both: 'Приглашающий и гость',
+} as const;
+
+// Остальные шаги того же гайда: страницы из той же папки с `step`.
+const folder = entry.id.split('/').slice(0, -1).join('/');
+const steps = step
+	? (
+			await getCollection(
+				'docs',
+				(e) => e.data.step !== undefined && e.id.split('/').slice(0, -1).join('/') === folder
+			)
+		).sort((a, b) => a.data.step! - b.data.step!)
+	: [];
 ---
 
+{
+	step && (
+		<p class="gd-eyebrow">
+			<span>
+				Шаг {step} из {steps.length}
+			</span>
+			{who && <span class={`gd-actor gd-actor--${who}`}>{actors[who]}</span>}
+		</p>
+	)
+}
 <Default />
 {
 	(updated || regions) && (
@@ -21,6 +50,30 @@ const { updated, regions } = entry.data;
 		</p>
 	)
 }
+{
+	steps.length > 1 && (
+		<nav class="gd-stepbar" aria-label="Шаги гайда">
+			<ol>
+				{steps.map((s) => (
+					<li class:list={[s.data.who && `gd-stepbar--${s.data.who}`]}>
+						<a
+							href={`${base}/${s.id}/`}
+							aria-current={s.id === entry.id ? 'step' : undefined}
+							title={s.data.sidebar?.label ?? s.data.title}
+							class:list={{ done: s.data.step! < step! }}
+						>
+							{s.data.step}
+						</a>
+					</li>
+				))}
+			</ol>
+		</nav>
+	)
+}
+
+<script>
+	import '../scripts/guide.ts';
+</script>
 
 <style>
 	.guide-meta {
@@ -30,5 +83,71 @@ const { updated, regions } = entry.data;
 		margin-top: 0.5rem;
 		font-size: var(--sl-text-sm);
 		color: var(--sl-color-gray-3);
+	}
+	.gd-eyebrow {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem 0.75rem;
+		margin-bottom: 0.5rem;
+		font-size: var(--sl-text-sm);
+		font-weight: 600;
+		color: var(--sl-color-text-accent);
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+	}
+	.gd-eyebrow .gd-actor {
+		text-transform: none;
+		letter-spacing: normal;
+	}
+	.gd-stepbar {
+		margin-top: 1rem;
+		overflow-x: auto;
+	}
+	.gd-stepbar ol {
+		display: flex;
+		gap: 0.25rem;
+		margin: 0;
+		padding: 0.25rem 0;
+		list-style: none;
+	}
+	.gd-stepbar li {
+		flex: 1 1 0;
+		min-width: 1.75rem;
+	}
+	.gd-stepbar a {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 1.75rem;
+		border-radius: 0.375rem;
+		border-bottom: 3px solid var(--gd-actor-color, var(--sl-color-gray-5));
+		background: var(--sl-color-gray-6);
+		color: var(--sl-color-gray-2);
+		font-size: var(--sl-text-xs);
+		font-weight: 600;
+		text-decoration: none;
+	}
+	.gd-stepbar a:hover {
+		background: var(--sl-color-gray-5);
+		color: var(--sl-color-white);
+	}
+	.gd-stepbar a.done {
+		color: var(--sl-color-gray-3);
+	}
+	.gd-stepbar a[aria-current='step'] {
+		background: var(--sl-color-accent);
+		color: var(--sl-color-black);
+		outline: 2px solid var(--sl-color-accent);
+		outline-offset: 1px;
+	}
+	.gd-stepbar--host {
+		--gd-actor-color: var(--gd-host);
+	}
+	.gd-stepbar--guest {
+		--gd-actor-color: var(--gd-guest);
+	}
+	.gd-stepbar--both {
+		--gd-actor-color: var(--gd-both);
 	}
 </style>

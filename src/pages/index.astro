@@ -2,9 +2,10 @@
 import { getCollection } from 'astro:content';
 import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
 
-const guides = (await getCollection('docs')).sort((a, b) =>
-	a.data.title.localeCompare(b.data.title, 'ru')
-);
+// На главной — только сами гайды: страницы-шаги внутри папок не показываем.
+const guides = (await getCollection('docs', (e) => !e.id.includes('/') || e.id.endsWith('/index')))
+	.map((e) => ({ ...e, id: e.id.replace(/\/index$/, '') }))
+	.sort((a, b) => a.data.title.localeCompare(b.data.title, 'ru'));
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 

@@ -1,0 +1,720 @@
+/*
+ * Оформление разметки гайдов (src/markdown/guide-directives.mjs).
+ * У каждого типа данных свой цвет и значок:
+ *   документ — синий, сумма — зелёный, срок — янтарный, место — розовый;
+ *   приглашающий — бирюзовый, гость — оранжевый, спонсор — фиолетовый.
+ */
+
+:root {
+	--gd-doc: #7cb4ff;
+	--gd-doc-bg: rgb(124 180 255 / 0.12);
+	--gd-fee: #6fd39b;
+	--gd-fee-bg: rgb(111 211 155 / 0.12);
+	--gd-time: #f5c35b;
+	--gd-time-bg: rgb(245 195 91 / 0.13);
+	--gd-place: #f497c0;
+	--gd-place-bg: rgb(244 151 192 / 0.12);
+	--gd-fill: #f5c35b;
+	--gd-fill-bg: rgb(245 195 91 / 0.18);
+	--gd-host: #4fd1c5;
+	--gd-host-bg: rgb(79 209 197 / 0.14);
+	--gd-guest: #fb9a5b;
+	--gd-guest-bg: rgb(251 154 91 / 0.14);
+	--gd-sponsor: #b9a1ff;
+	--gd-sponsor-bg: rgb(185 161 255 / 0.15);
+	--gd-both: #a3b8cc;
+	--gd-both-bg: rgb(163 184 204 / 0.14);
+	--gd-card-bg: var(--sl-color-gray-6);
+	--gd-radius: 0.6rem;
+}
+
+:root[data-theme='light'] {
+	--gd-doc: #1d5fc4;
+	--gd-doc-bg: #eaf2ff;
+	--gd-fee: #137a45;
+	--gd-fee-bg: #e6f6ed;
+	--gd-time: #9a5b00;
+	--gd-time-bg: #fff3d6;
+	--gd-place: #b0306b;
+	--gd-place-bg: #fdebf3;
+	--gd-fill: #8a5200;
+	--gd-fill-bg: #ffe9b3;
+	--gd-host: #0f766e;
+	--gd-host-bg: #e0f5f2;
+	--gd-guest: #b4530f;
+	--gd-guest-bg: #fdeee2;
+	--gd-sponsor: #6d47d9;
+	--gd-sponsor-bg: #f0ebff;
+	--gd-both: #4b5d70;
+	--gd-both-bg: #eaf0f5;
+	--gd-card-bg: #f7f8fa;
+}
+
+/* Значки (маски, чтобы цвет брался из currentColor). */
+:root {
+	--gd-icon-doc: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z'/%3E%3Cpath d='M14 3v5h5M9 13h6M9 17h4'/%3E%3C/svg%3E");
+	--gd-icon-fee: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M15.5 8.5a4.5 4.5 0 1 0 0 7M7 11h6M7 13.5h6'/%3E%3C/svg%3E");
+	--gd-icon-time: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E");
+	--gd-icon-place: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z'/%3E%3Ccircle cx='12' cy='10' r='2.5'/%3E%3C/svg%3E");
+	--gd-icon-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+}
+
+/* ---------- Строчные пометки ---------- */
+
+.gd-chip {
+	--gd-c: var(--sl-color-text);
+	--gd-c-bg: var(--sl-color-gray-6);
+	display: inline;
+	padding: 0.05em 0.4em 0.1em;
+	border-radius: 0.35em;
+	background: var(--gd-c-bg);
+	color: var(--gd-c);
+	font-weight: 600;
+	white-space: nowrap;
+	box-decoration-break: clone;
+	-webkit-box-decoration-break: clone;
+}
+.gd-chip--doc,
+.gd-chip--place {
+	white-space: normal;
+}
+.gd-chip::before {
+	content: '';
+	display: inline-block;
+	width: 0.95em;
+	height: 0.95em;
+	margin-right: 0.3em;
+	vertical-align: -0.12em;
+	background: currentColor;
+	-webkit-mask: var(--gd-icon) center / contain no-repeat;
+	mask: var(--gd-icon) center / contain no-repeat;
+}
+.gd-chip--doc {
+	--gd-c: var(--gd-doc);
+	--gd-c-bg: var(--gd-doc-bg);
+	--gd-icon: var(--gd-icon-doc);
+}
+.gd-chip--fee {
+	--gd-c: var(--gd-fee);
+	--gd-c-bg: var(--gd-fee-bg);
+	--gd-icon: var(--gd-icon-fee);
+}
+.gd-chip--time {
+	--gd-c: var(--gd-time);
+	--gd-c-bg: var(--gd-time-bg);
+	--gd-icon: var(--gd-icon-time);
+}
+.gd-chip--place {
+	--gd-c: var(--gd-place);
+	--gd-c-bg: var(--gd-place-bg);
+	--gd-icon: var(--gd-icon-place);
+}
+.gd-chip--fill {
+	--gd-c: var(--gd-fill);
+	--gd-c-bg: var(--gd-fill-bg);
+	font-weight: 500;
+	border-bottom: 1px dashed currentColor;
+	border-radius: 0.2em;
+	white-space: normal;
+}
+.gd-chip--fill::before {
+	content: none;
+}
+
+/* Кто делает */
+.gd-actor {
+	--gd-c: var(--gd-both);
+	--gd-c-bg: var(--gd-both-bg);
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35em;
+	padding: 0.05em 0.55em 0.1em;
+	border-radius: 999px;
+	background: var(--gd-c-bg);
+	color: var(--gd-c);
+	font-size: 0.85em;
+	font-weight: 600;
+	white-space: nowrap;
+	vertical-align: 0.05em;
+}
+.gd-actor::before {
+	content: '';
+	width: 0.5em;
+	height: 0.5em;
+	border-radius: 50%;
+	background: currentColor;
+}
+.gd-actor--host {
+	--gd-c: var(--gd-host);
+	--gd-c-bg: var(--gd-host-bg);
+}
+.gd-actor--guest {
+	--gd-c: var(--gd-guest);
+	--gd-c-bg: var(--gd-guest-bg);
+}
+.gd-actor--sponsor {
+	--gd-c: var(--gd-sponsor);
+	--gd-c-bg: var(--gd-sponsor-bg);
+}
+
+/* ---------- Карточка документа ---------- */
+
+.gd-doc {
+	--gd-accent: var(--gd-doc);
+	position: relative;
+	padding: 0.85rem 1rem 0.9rem 1.1rem;
+	border: 1px solid var(--sl-color-gray-5);
+	border-left: 4px solid var(--gd-accent);
+	border-radius: var(--gd-radius);
+	background: var(--gd-card-bg);
+}
+.gd-doc--host {
+	--gd-accent: var(--gd-host);
+}
+.gd-doc--guest {
+	--gd-accent: var(--gd-guest);
+}
+.gd-doc--sponsor {
+	--gd-accent: var(--gd-sponsor);
+}
+.gd-doc__head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.35rem 0.75rem;
+}
+.gd-doc__title {
+	display: inline-flex;
+	gap: 0.45rem;
+	align-items: baseline;
+	color: var(--sl-color-white);
+	font-weight: 700;
+	font-size: var(--sl-text-base);
+	line-height: 1.35;
+}
+.gd-doc__title::before {
+	content: '';
+	flex: none;
+	width: 1.05em;
+	height: 1.05em;
+	align-self: center;
+	background: var(--gd-doc);
+	-webkit-mask: var(--gd-icon-doc) center / contain no-repeat;
+	mask: var(--gd-icon-doc) center / contain no-repeat;
+}
+.sl-markdown-content .gd-doc__meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem 0.5rem;
+	margin: 0.6rem 0 0;
+	padding: 0;
+}
+.sl-markdown-content .gd-doc__meta-item {
+	display: inline-flex;
+	gap: 0.35rem;
+	margin: 0;
+	padding: 0.15rem 0.55rem;
+	border-radius: 0.4rem;
+	background: var(--sl-color-gray-7, var(--sl-color-black));
+	border: 1px solid var(--sl-color-gray-5);
+	font-size: var(--sl-text-xs);
+	line-height: 1.5;
+}
+.sl-markdown-content .gd-doc__meta-item dt {
+	margin: 0;
+	color: var(--sl-color-gray-3);
+	font-weight: 400;
+}
+.sl-markdown-content .gd-doc__meta-item dt::after {
+	content: ':';
+}
+.sl-markdown-content .gd-doc__meta-item dd {
+	margin: 0;
+	color: var(--sl-color-white);
+	font-weight: 600;
+}
+.gd-doc__meta-item--fresh dd {
+	color: var(--gd-time);
+}
+.gd-doc__body {
+	margin-top: 0.6rem;
+	font-size: var(--sl-text-sm);
+}
+.gd-doc__body > :first-child {
+	margin-top: 0;
+}
+
+/* Несколько карточек подряд — плотнее */
+.sl-markdown-content .gd-doc + .gd-doc {
+	margin-top: 0.6rem;
+}
+
+/* ---------- «Коротко» ---------- */
+
+.gd-summary {
+	padding: 1rem;
+	border-radius: var(--gd-radius);
+	background: linear-gradient(
+		135deg,
+		color-mix(in srgb, var(--sl-color-accent) 14%, transparent),
+		color-mix(in srgb, var(--sl-color-accent) 4%, transparent)
+	);
+	border: 1px solid color-mix(in srgb, var(--sl-color-accent) 35%, transparent);
+}
+.sl-markdown-content .gd-summary__title {
+	margin: 0 0 0.6rem;
+	color: var(--sl-color-text-accent);
+	font-size: var(--sl-text-xs);
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+.sl-markdown-content .gd-summary ul {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+	gap: 0.5rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.sl-markdown-content .gd-summary li {
+	margin: 0;
+	padding: 0.55rem 0.7rem;
+	border-radius: 0.45rem;
+	background: var(--sl-color-bg);
+	font-size: var(--sl-text-sm);
+	line-height: 1.45;
+}
+.sl-markdown-content .gd-summary li > strong:first-child {
+	display: block;
+	margin-bottom: 0.15rem;
+	color: var(--sl-color-gray-3);
+	font-size: var(--sl-text-xs);
+	font-weight: 600;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+}
+
+/* ---------- Шаблон текста ---------- */
+
+.sl-markdown-content .gd-template {
+	margin-inline: 0;
+	border: 1px dashed var(--sl-color-gray-4);
+	border-radius: var(--gd-radius);
+	overflow: hidden;
+}
+.gd-template__title {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	padding: 0.5rem 0.75rem 0.5rem 1rem;
+	background: var(--sl-color-gray-6);
+	border-bottom: 1px dashed var(--sl-color-gray-4);
+	color: var(--sl-color-white);
+	font-size: var(--sl-text-sm);
+	font-weight: 700;
+}
+.gd-template__body {
+	padding: 0.9rem 1rem;
+	font-family: Georgia, 'Times New Roman', serif;
+	font-size: var(--sl-text-sm);
+	line-height: 1.6;
+}
+.gd-template__body > :first-child {
+	margin-top: 0;
+}
+.gd-copy {
+	flex: none;
+	padding: 0.25rem 0.7rem;
+	border: 1px solid var(--sl-color-gray-4);
+	border-radius: 0.4rem;
+	background: var(--sl-color-bg);
+	color: var(--sl-color-white);
+	font: inherit;
+	font-size: var(--sl-text-xs);
+	font-weight: 600;
+	cursor: pointer;
+}
+.gd-copy:hover {
+	border-color: var(--sl-color-accent);
+}
+.gd-copy[data-done] {
+	border-color: var(--gd-fee);
+	color: var(--gd-fee);
+}
+
+/* ---------- Лента шагов ---------- */
+
+.sl-markdown-content .gd-steps > ol {
+	counter-reset: gd-step;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.sl-markdown-content .gd-steps > ol > li {
+	counter-increment: gd-step;
+	position: relative;
+	margin: 0;
+	padding: 0 0 1.1rem 2.75rem;
+}
+.gd-steps > ol > li::before {
+	content: counter(gd-step);
+	position: absolute;
+	top: -0.1rem;
+	left: 0;
+	display: grid;
+	place-items: center;
+	width: 1.9rem;
+	height: 1.9rem;
+	border-radius: 50%;
+	background: var(--sl-color-gray-6);
+	border: 2px solid var(--sl-color-accent);
+	color: var(--sl-color-white);
+	font-size: var(--sl-text-sm);
+	font-weight: 700;
+}
+.gd-steps > ol > li::after {
+	content: '';
+	position: absolute;
+	top: 2rem;
+	bottom: 0.15rem;
+	left: calc(0.95rem - 1px);
+	width: 2px;
+	background: var(--sl-color-gray-5);
+}
+.gd-steps > ol > li:last-child::after {
+	content: none;
+}
+.sl-markdown-content .gd-steps > ol > li > :first-child {
+	margin-top: 0;
+}
+.sl-markdown-content .gd-steps li p {
+	margin-top: 0.3rem;
+}
+
+/* ---------- Чек-листы ---------- */
+
+.gd-checklist {
+	padding: 0.9rem 1rem 0.6rem;
+	border: 1px solid var(--sl-color-gray-5);
+	border-radius: var(--gd-radius);
+	background: var(--gd-card-bg);
+}
+.gd-checklist__head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.35rem 0.75rem;
+}
+.gd-checklist__title {
+	color: var(--sl-color-white);
+	font-weight: 700;
+}
+.gd-progress {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	margin-top: 0.6rem;
+	font-size: var(--sl-text-xs);
+	color: var(--sl-color-gray-3);
+}
+.gd-progress__bar {
+	flex: 1;
+	height: 0.4rem;
+	border-radius: 999px;
+	background: var(--sl-color-gray-5);
+	overflow: hidden;
+}
+.gd-progress__fill {
+	height: 100%;
+	width: 0;
+	border-radius: inherit;
+	background: var(--gd-fee);
+	transition: width 0.2s ease;
+}
+.gd-progress__reset {
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--sl-color-text-accent);
+	font: inherit;
+	cursor: pointer;
+	text-decoration: underline;
+}
+.gd-checklist[data-complete] .gd-progress {
+	color: var(--gd-fee);
+	font-weight: 600;
+}
+
+/* Интерактивные пункты списков задач (включает скрипт) */
+.sl-markdown-content .contains-task-list {
+	padding-inline-start: 0;
+	list-style: none;
+}
+.sl-markdown-content .task-list-item {
+	position: relative;
+	padding: 0.2rem 0 0.2rem 1.9rem;
+	border-radius: 0.35rem;
+}
+.sl-markdown-content .task-list-item + .task-list-item {
+	margin-top: 0.15rem;
+}
+.sl-markdown-content .task-list-item > input[type='checkbox'] {
+	position: absolute;
+	top: 0.3rem;
+	left: 0.2rem;
+	appearance: none;
+	-webkit-appearance: none;
+	width: 1.15rem;
+	height: 1.15rem;
+	margin: 0;
+	border: 2px solid var(--sl-color-gray-3);
+	border-radius: 0.3rem;
+	background: var(--sl-color-bg);
+}
+.sl-markdown-content .task-list-item > input[type='checkbox']:checked {
+	border-color: var(--gd-fee);
+	background: var(--gd-fee);
+}
+.sl-markdown-content .task-list-item > input[type='checkbox']:checked::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: var(--sl-color-bg);
+	-webkit-mask: var(--gd-icon-check) center / 85% no-repeat;
+	mask: var(--gd-icon-check) center / 85% no-repeat;
+}
+.sl-markdown-content [data-interactive] > .task-list-item {
+	cursor: pointer;
+}
+.sl-markdown-content [data-interactive] > .task-list-item:hover {
+	background: var(--sl-color-gray-6);
+}
+.sl-markdown-content [data-interactive] > .task-list-item > input {
+	cursor: pointer;
+}
+.sl-markdown-content .task-list-item:has(> input:checked) {
+	color: var(--sl-color-gray-3);
+}
+.sl-markdown-content .task-list-item:has(> input:checked) > .gd-chip {
+	opacity: 0.75;
+}
+.sl-markdown-content .task-list-item > input:focus-visible {
+	outline: 2px solid var(--sl-color-accent);
+	outline-offset: 2px;
+}
+
+/* ---------- Калькулятор дат ---------- */
+
+.gd-planner {
+	padding: 1rem;
+	border: 1px solid var(--sl-color-gray-5);
+	border-radius: var(--gd-radius);
+	background: var(--gd-card-bg);
+}
+.gd-planner__form {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem 1rem;
+	align-items: end;
+}
+.gd-planner__form label {
+	display: grid;
+	gap: 0.25rem;
+	color: var(--sl-color-gray-2);
+	font-size: var(--sl-text-sm);
+	font-weight: 600;
+}
+.gd-planner__form input {
+	min-height: 2.4rem;
+	padding: 0.3rem 0.6rem;
+	border: 1px solid var(--sl-color-gray-4);
+	border-radius: 0.4rem;
+	background: var(--sl-color-bg);
+	color: var(--sl-color-white);
+	font: inherit;
+	color-scheme: light dark;
+}
+.gd-planner__form input[type='number'] {
+	width: 6rem;
+}
+.gd-planner__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin-top: 0.9rem;
+}
+.gd-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	min-height: 2.25rem;
+	padding: 0.3rem 0.9rem;
+	border: 1px solid var(--sl-color-accent);
+	border-radius: 0.4rem;
+	background: var(--sl-color-accent);
+	color: var(--sl-color-black);
+	font: inherit;
+	font-size: var(--sl-text-sm);
+	font-weight: 600;
+	cursor: pointer;
+}
+.gd-btn--ghost {
+	background: transparent;
+	color: var(--sl-color-text-accent);
+}
+.sl-markdown-content .gd-planner__alert {
+	margin: 0.9rem 0 0;
+	padding: 0.6rem 0.8rem;
+	border-radius: 0.4rem;
+	font-size: var(--sl-text-sm);
+}
+.gd-planner__alert--warn {
+	background: var(--gd-time-bg);
+	color: var(--gd-time);
+}
+.gd-planner__alert--bad {
+	background: color-mix(in srgb, var(--sl-color-red) 15%, transparent);
+	color: var(--sl-color-red-high);
+}
+.sl-markdown-content .gd-planner__list {
+	margin: 1rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+.sl-markdown-content .gd-planner__list li {
+	display: grid;
+	grid-template-columns: 8.5rem 1fr;
+	gap: 0.15rem 1rem;
+	margin: 0;
+	padding: 0.6rem 0;
+	border-top: 1px solid var(--sl-color-gray-5);
+}
+.gd-planner__date {
+	color: var(--gd-time);
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+}
+.gd-planner__date small {
+	display: block;
+	color: var(--sl-color-gray-3);
+	font-size: var(--sl-text-xs);
+	font-weight: 500;
+}
+.gd-planner__what {
+	display: grid;
+	gap: 0.15rem;
+}
+.gd-planner__what strong {
+	color: var(--sl-color-white);
+}
+.gd-planner__what small {
+	color: var(--sl-color-gray-3);
+	font-size: var(--sl-text-xs);
+}
+.gd-planner__list li.is-past .gd-planner__date {
+	color: var(--sl-color-red-high);
+}
+.gd-planner__list li.is-entry {
+	border-top-color: var(--sl-color-accent);
+}
+.gd-planner__list li.is-entry .gd-planner__date {
+	color: var(--sl-color-text-accent);
+}
+@media (max-width: 40rem) {
+	.sl-markdown-content .gd-planner__list li {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* ---------- Образец визы ---------- */
+
+.gd-visa {
+	--gd-visa-bg: #e9eef7;
+	--gd-visa-ink: #1b2a44;
+	--gd-visa-line: #b9c6dc;
+	max-width: 36rem;
+	padding: 0.8rem 0.9rem 0.6rem;
+	border-radius: 0.6rem;
+	background:
+		repeating-linear-gradient(115deg, transparent 0 12px, rgb(29 95 196 / 0.05) 12px 13px),
+		var(--gd-visa-bg);
+	color: var(--gd-visa-ink);
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: 0.78rem;
+	line-height: 1.3;
+	box-shadow: 0 1px 0 rgb(0 0 0 / 0.05), 0 6px 20px -10px rgb(0 0 0 / 0.4);
+}
+.gd-visa__row {
+	display: grid;
+	gap: 0.4rem;
+	grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
+}
+.gd-visa__row + .gd-visa__row {
+	margin-top: 0.4rem;
+}
+.gd-visa__f {
+	position: relative;
+	padding: 0.3rem 0.45rem;
+	border: 1px solid var(--gd-visa-line);
+	border-radius: 0.3rem;
+	background: rgb(255 255 255 / 0.55);
+}
+.gd-visa__f small {
+	display: block;
+	color: #52627d;
+	font-size: 0.62rem;
+	letter-spacing: 0.04em;
+}
+.gd-visa__f b {
+	font-weight: 700;
+}
+.gd-visa__f[data-n]::after {
+	content: attr(data-n);
+	position: absolute;
+	top: -0.55rem;
+	right: -0.45rem;
+	display: grid;
+	place-items: center;
+	width: 1.2rem;
+	height: 1.2rem;
+	border-radius: 50%;
+	background: #d9480f;
+	color: #fff;
+	font-family: var(--sl-font);
+	font-size: 0.68rem;
+	font-weight: 700;
+}
+.gd-visa__f--key {
+	border-color: #d9480f;
+	background: #fff4ec;
+}
+.gd-visa__mrz {
+	margin-top: 0.5rem;
+	padding-top: 0.4rem;
+	border-top: 1px dashed var(--gd-visa-line);
+	color: #52627d;
+	font-size: 0.7rem;
+	letter-spacing: 0.08em;
+	overflow-wrap: anywhere;
+}
+
+/* ---------- Печать ---------- */
+
+@media print {
+	.gd-copy,
+	.gd-progress__reset,
+	.gd-planner__form,
+	.gd-planner__actions,
+	.gd-stepbar {
+		display: none !important;
+	}
+	.gd-doc,
+	.gd-checklist,
+	.gd-summary {
+		break-inside: avoid;
+	}
+}
