@@ -177,6 +177,14 @@
 .gd-doc--sponsor {
 	--gd-accent: var(--gd-sponsor);
 }
+.gd-doc--place {
+	--gd-accent: var(--gd-place);
+}
+.gd-doc--place .gd-doc__title::before {
+	background: var(--gd-place);
+	-webkit-mask-image: var(--gd-icon-place);
+	mask-image: var(--gd-icon-place);
+}
 .gd-doc__head {
 	display: flex;
 	flex-wrap: wrap;

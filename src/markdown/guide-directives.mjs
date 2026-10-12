@@ -27,6 +27,7 @@ const ACTORS = {
 
 /** Подписи к атрибутам карточки документа, в порядке вывода. */
 const DOC_META = [
+	['place', 'Адрес'],
 	['where', 'Где взять'],
 	['form', 'Что сдать'],
 	['fresh', 'Срок годности'],
@@ -58,7 +59,7 @@ function actorPill(who) {
 }
 
 const containers = {
-	/** Карточка документа. */
+	/** Карточка документа. С `kind="place"` — карточка организации или офиса. */
 	doc(node) {
 		const { label, children } = takeLabel(node);
 		const attrs = node.attributes ?? {};
@@ -74,7 +75,8 @@ const containers = {
 		const parts = [el('div', { class: 'gd-doc__head' }, head)];
 		if (meta.length) parts.push(el('dl', { class: 'gd-doc__meta' }, meta));
 		if (children.length) parts.push(el('div', { class: 'gd-doc__body' }, children));
-		return el('div', { class: `gd-doc${attrs.who ? ` gd-doc--${attrs.who}` : ''}` }, parts);
+		const classes = ['gd-doc', attrs.who && `gd-doc--${attrs.who}`, attrs.kind === 'place' && 'gd-doc--place'];
+		return el('div', { class: classes.filter(Boolean).join(' ') }, parts);
 	},
 
 	/** «Коротко о шаге»: список вида «- **Кто:** ...» превращается в сетку. */
