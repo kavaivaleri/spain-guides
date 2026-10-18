@@ -276,17 +276,33 @@ Autorización de residencia temporal del menor extranjero acompañado nacido en 
 
    :time[В течение месяца] после одобрения ВНЖ — в [системе записи](https://icp.administracionelectronica.gob.es/icpplus/index.html), процедура «POLICÍA-TOMA DE HUELLAS (EXPEDICIÓN DE TARJETA)…». Запись — на каждого ребёнка отдельно, на его имя и NIE.
 
-2. **Документы**
+2. **Пошлина Modelo 790 código 012 — заплатить до приёма**
 
-   :doc[EX-17] — заявление на TIE, скачать на [странице общих бланков](https://www.inclusion.gob.es/web/migraciones/modelos-generales). Для Ley 14/2013 — ещё :doc[MI-TIE]. Паспорт ребёнка, решение о ВНЖ, фото, документ родителя и свидетельство о рождении.
+   Бланк — на [sede.policia.gob.es/Tasa790_012](https://sede.policia.gob.es/Tasa790_012/), «TIE que documenta la primera concesión de la autorización de residencia temporal…», :fee[16,08 €]. На каждого ребёнка свой бланк с его NIE. Оплатить можно в кассе банка или, по опыту, в банкомате со сканером штрихкода (например, BBVA): «Pagos — impuestos con código de barras», поднести штрихкод бланка, ввести NIE и сумму. Квитанцию распечатайте.
 
-3. **Пошлина Modelo 790 código 012**
-
-   Бланк — на [sede.policia.gob.es/Tasa790_012](https://sede.policia.gob.es/Tasa790_012/), «TIE que documenta la primera concesión de la autorización de residencia temporal…», :fee[16,08 €]. На каждого ребёнка свой бланк.
+3. **Собрать документы** — список ниже.
 
 4. **Отпечатки и получение**
 
    Ребёнок приходит с родителем. У детей младше 6 лет отпечатки не берут, но ребёнка всё равно приводят. Карточку забирают по отдельной записи.
+:::
+
+По опыту читателей гайда, в Астурии на отпечатках хватило шести документов из первого списка. Остальное есть в официальном списке полиции на странице записи, но его не спрашивали — возьмите на всякий случай, это ничего не стоит.
+
+:::checklist[Что взять на отпечатки — на каждого ребёнка]{id="rr-docs-tie"}
+- [ ] Бланк :doc[EX-17], подписанный родителем у слова «FIRMA». Скачать на [странице общих бланков](https://www.inclusion.gob.es/web/migraciones/modelos-generales), в разделе 4.1 отметить «Tarjeta inicial».
+- [ ] Бланк пошлины 790-012 целиком (с частью «Ejemplar para la Administración») и распечатанная квитанция об оплате.
+- [ ] Свежее цветное фото 32 × 26 мм на светлом фоне. В фотостудии скажите, что для TIE, или ищите «foto carnet».
+- [ ] Решение об одобрении ВНЖ, распечатанное.
+- [ ] Справка о прописке, не старше :time[3 месяцев] ([как получить](#3-прописка)).
+- [ ] Паспорт ребёнка.
+:::
+
+:::checklist[Для ребёнка и на всякий случай]{id="rr-docs-tie-extra"}
+- [ ] Документ родителя, который приводит ребёнка (TIE и паспорт), и свидетельство о рождении — полиция требует подтвердить родство, если ребёнка приводит представитель.
+- [ ] Копии: EX-17, заполненных страниц паспорта, справки о прописке.
+- [ ] Распечатанное подтверждение записи (justificante de cita).
+- [ ] Только по Ley 14/2013: бланк :doc[MI-TIE] ([где взять](https://www.inclusion.gob.es/web/migraciones/modelos-de-solicitudes-de-la-ley-14/2013)). Он в списке полиции, но, по опыту читателей в Астурии, его не спрашивали.
 :::
 
 Подробно, с бланками и записью в Астурии: [ВНЖ цифрового кочевника — после одобрения](../../vnzh-cifrovogo-kochevnika/posle-odobreniya/). Шаги те же для любого ВНЖ.
@@ -439,4 +455,5 @@ Autorización de residencia temporal del menor extranjero acompañado nacido en 
 - N26 — банк-партнёр Seguridad Social, нужен испанский IBAN — [по сообщению N26](https://n26.com/es-es/prensa/comunicados-de-prensa/n26-entidad-colaboradora-seguridad-social).
 - Пошлины за DNI 12 € и паспорт 30 € — по данным [idealista](https://www.idealista.com/news/node/803963) и [Cohen y Aguirre](https://cohenyaguirre.es/precio-del-pasaporte-espanol-en-2026-tarifas-oficiales).
 - Медицинская карта в Астурии — по описанию процедуры 2003301 «Obtención de la Tarjeta Sanitaria Individual» Principado de Asturias ([papelea.com](https://papelea.com/es/gobierno-del-principado-de-asturias/2003301-obtencion-de-la-tarjeta-sanitaria-individual)) и [руководству онлайн-формы Principado](https://www54.asturias.es/solicitudTarjetaSanitaria/ficheros/manualUsuario.pdf). Официальную страницу SESPA о первой карте найти не удалось.
+- Список документов на отпечатки и оплата пошлины в банкомате со штрихкодом — по памятке помощников по ВНЖ и опыту читателей гайда в Астурии: по этому списку приняли, остального не спрашивали (сообщено 18.10.2026).
 - Телефон прописки в Gijón 985 18 11 05 — по [памятке мэрии о документах для прописки](https://drupal.gijon.es/sites/default/files/2018-12/INF%2002.01-3.pdf).
