@@ -1,7 +1,7 @@
 ---
 title: Отпуск по рождению и выплата INSS
 description: 19 недель на каждого родителя — как они делятся, кто имеет право, сколько платит INSS и как считать сумму, как подать заявку и запросить следующие периоды
-updated: 2026-10-15
+updated: 2026-10-18
 regions: вся Испания
 sidebar:
   order: 2
@@ -103,7 +103,7 @@ sidebar:
    Обычно INSS получает их сам: справку из больницы о родах (informe de maternidad), запись о рождении из Registro Civil, справку работодателя. Если что-то не дошло, INSS попросит прислать. Держите под рукой:
 
    - :doc[NIE / TIE] или паспорт;
-   - :doc[Certificado de nacimiento] или :doc[Libro de familia] — свидетельство о рождении или семейную книгу;
+   - :doc[Certificado de nacimiento] — свидетельство о рождении ([как получить](../dokumenty/#свидетельство-о-рождении-certificado-de-nacimiento)). Семейную книгу (Libro de familia) с 2021 года не выдают;
    - IBAN счёта для выплаты;
    - для autónomos — заявление о том, что происходит с вашей деятельностью во время отпуска (declaración de situación de la actividad), если INSS попросит.
 
