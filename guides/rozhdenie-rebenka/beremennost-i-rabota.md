@@ -4,7 +4,7 @@ description: Выплата за опасную работу при береме
 updated: 2026-10-15
 regions: вся Испания
 sidebar:
-  order: 6
+  order: 7
   label: Беременность и работа
 ---
 
